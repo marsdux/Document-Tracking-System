@@ -1,0 +1,15 @@
+   # NetBeans / Ant build output
+   build/
+   dist/
+   nbbuild/
+   nbproject/private/
+
+   # Compiled files (keep lib/sqlite-jdbc.jar, which is a dependency)
+   *.class
+
+   # Runtime data created by the app: never commit real records
+   data/
+   logs/
+   backups/
+   *.db
+   *.log
