@@ -1,0 +1,4 @@
+[2026-09-04 06:49:09] INFO  - Migration: added users.password_salt (legacy accounts will be upgraded to salted hashing automatically on next successful login)
+[2026-09-04 06:49:09] INFO  - Migration: added routing_steps.batch_id (multi-recipient routing support)
+[2026-09-04 17:50:31] INFO  - Migration: added document_types lookup table
+[2026-09-13 11:35:32] INFO  - Migration: added attachments.routing_step_id (per-action evidence attachments; existing attachments become document-level)

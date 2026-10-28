@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+This is a minimal, hand-written stand-in for NetBeans' normally
+auto-generated nbproject/build-impl.xml. When you open this project in
+real NetBeans, it will detect and regenerate the full build-impl.xml
+automatically; you do not need to edit this file. It's included so the
+project also builds from the command line via ant if NetBeans isn't
+available.
+-->
+<project name="DocTrackSys-impl" default="default" basedir="..">
+    <target name="default" depends="jar" description="Build whole project."/>
+
+    <target name="init">
+        <property file="nbproject/project.properties"/>
+        <mkdir dir="${build.classes.dir}"/>
+        <mkdir dir="${dist.dir}"/>
+        <path id="classpath">
+            <pathelement location="${file.reference.sqlite-jdbc.jar}"/>
+        </path>
+    </target>
+
+    <target name="compile" depends="init">
+        <javac srcdir="${src.dir}" destdir="${build.classes.dir}"
+               source="${javac.source}" target="${javac.target}"
+               encoding="${source.encoding}" includeantruntime="false">
+            <classpath refid="classpath"/>
+        </javac>
+        <copy todir="${build.classes.dir}">
+            <fileset dir="${src.dir}" excludes="**/*.java"/>
+        </copy>
+    </target>
+
+    <target name="jar" depends="compile">
+        <jar destfile="${dist.jar}" basedir="${build.classes.dir}">
+            <manifest>
+                <attribute name="Main-Class" value="${main.class}"/>
+                <attribute name="Class-Path" value="../lib/sqlite-jdbc.jar"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="run" depends="jar">
+        <java jar="${dist.jar}" fork="true">
+            <classpath>
+                <path refid="classpath"/>
+                <path location="${dist.jar}"/>
+            </classpath>
+        </java>
+    </target>
+
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+        <delete dir="${dist.dir}"/>
+    </target>
+</project>
