@@ -1,87 +1,77 @@
-# DocTrackSys (Document Tracking System)
+# Document Tracking System (DocTrackSys)
 
-**DocTrackSys** is a robust, desktop-based Document Tracking System built using Java (Swing) and backed by a SQLite database. It is designed to manage, monitor, route, and secure corporate or institutional documentation across various office hierarchies and personnel departments.
+A Java Swing desktop application for tracking documents, memos and communications through an organization: who holds them, what was done, proof of compliance, and how long each step took. Data is stored locally in SQLite.
 
----
+<!--
+Add screenshots after you upload them to a docs/ folder, then remove these comment markers:
+![Document list](docs/document-list.png)
+![Routing and history](docs/routing.png)
+-->
 
-## 🛠️ Tech Stack & Architecture
+## Features
 
-* **Language:** Java 8+ (or compatible JDK versions)
-* **GUI Framework:** Java Swing / AWT
-* **Database:** SQLite (Embedded relational database)
-* **Build System:** Apache Ant (`build.xml`)
-* **Logging System:** Custom application logging framework (`app.log`)
+- **Secure login:** salted PBKDF2 password hashing, a lockout after 5 failed attempts (5 minutes), and role separation between admins and other users.
+- **Document management:** add, edit and search incoming and outgoing documents, with editable document types.
+- **Routing:** forward a document to one or several recipients, or forward several documents at once. Every step is recorded, with a full printable history.
+- **Evidence attachments:** attach scanned proof to a specific action, with file hashing to detect tampering.
+- **Organization structure:** editable offices and personnel hierarchy used for routing.
+- **Monitoring and reports:** overdue detection, turnaround-time reports, a summary report and CSV export.
+- **Audit log (admin):** system-wide record of actions, including login successes and failures.
+- **Backup and restore (admin):** verified full backup and restore with tamper detection.
+- **Reliability:** automatic schema migrations on startup, file-based error logging, and database and data paths that stay the same wherever the app is launched from.
 
-### MVC Architecture
-The system follows a decoupled Model-View-Controller/DAO pattern:
-* **`model/`**: Contains core data structures (`Document`, `Office`, `Personnel`, `User`, `Attachment`, `RoutingStep`).
-* **`dao/` (Data Access Objects)**: Manages database interactions (`DocumentDAO`, `OfficeDAO`, `UserDAO`, etc.).
-* **`ui/`**: Holds the Swing graphical interface elements (`MainFrame`, `LoginFrame`, dashboards, dialogs).
-* **`util/`**: Essential utility classes handling cryptographic password hashing, CSV handling, file hash verifications, and system backups.
+## Tech stack
 
----
+| Area | Technology |
+|---|---|
+| Language | Java 17 |
+| UI | Swing / AWT |
+| Database | SQLite via `sqlite-jdbc` (`lib/sqlite-jdbc.jar`) |
+| Build | NetBeans, Apache Ant |
+| Architecture | model / DAO / UI layers |
 
-## 🚀 Key Features
+## Getting started
 
-* **Secure Authentication:** User login architecture utilizing hashed password verifications and brute-force attempt tracking mechanisms.
-* **Document Lifecycle Management:** Complete processing of document types, tracking updates, ownership mappings, and metadata.
-* **Granular Document Routing:** Visual modeling of organizational workflows allowing transactional document forwarding across distinct steps and office stations.
-* **File Attachments Control:** Secure local storage mapping and system hash integration (`FileHashUtil`) to prevent file tampering or collision errors.
-* **Organizational Chart Visualization:** Interactive representation of the operational hierarchy of company office nodes and mapped personnel units.
-* **Comprehensive Audit Trail:** Automatic foreground capture of system operations logging transactional histories to an immutable database registry.
-* **Automated Data Protection:** Built-in panels managing physical cryptographic data export and restoration structures.
+**Requirements:** JDK 17 or newer (not just a JRE). NetBeans or Ant.
 
----
+**NetBeans:** *File > Open Project*, select the `DocTrackSys` folder, confirm `lib/sqlite-jdbc.jar` is under *Properties > Libraries*, then run.
 
-## 📁 Repository Directory Structure
+**Command line:**
 
-```text
-DocTrackSys/
-├── build.xml                     # Apache Ant build script
-├── README.md                     # Project documentation
-├── src/                          # Application source code
-│   └── doctrack/
-│       ├── Main.java             # System entry point
-│       ├── model/                # Enterprise data entities
-│       ├── dao/                  # Database connectivity layer
-│       ├── db/                   # DB connection setup and raw schema.sql
-│       ├── ui/                   # Swing GUI layout panels and components
-│       ├── report/               # Analytical document report scripts
-│       └── util/                 # Logger, backup engines, hash & password tools
-├── lib/
-│   └── sqlite-jdbc.jar           # Embedded SQLite relational connector driver
-├── nbproject/                    # NetBeans IDE runtime project meta configurations
-└── dist/                         # Distribution target folder compiled binaries
-    ├── DocTrackSys.jar           # Executable client application
-    ├── data/
-    │   └── doctrack.db           # Live structural active SQLite database file
-    └── logs/
-        └── app.log               # Live operation debugging trail registry
-```
-
----
-
-## ⚡ Getting Started
-
-### Prerequisites
-* Ensure **Java Development Kit (JDK) 8** or higher is installed.
-* Verify `ant` is configured in your global path variables if utilizing CLI compiling structures.
-
-### Building from Source (Apache Ant)
-To compile the system and bundle dependencies into the distribution package, open your terminal at the root of the project folder and run:
 ```bash
-ant clean compile jar
-```
-
-### Running the Application
-You can run the application directly from the generated executable jar container located inside the distributed output hierarchy:
-```bash
+cd DocTrackSys
+ant clean jar
 java -jar dist/DocTrackSys.jar
 ```
 
----
+The database is created automatically on first run in a `data/` folder next to the application.
 
-## 🔒 Security & Utilities Implementation Notes
+**Demo login:** username `admin`, password `admin123`. Change this before using the app with real data. A change-password screen is not built yet.
 
-1. **Database Schema Initialization:** On standard deployments, the relational baseline can be initialized manually or evaluated sequentially via the included `src/doctrack/db/schema.sql` database build script.
-2. **File Authenticity Control:** Document storage integrations require standard runtime configurations mapping toward system execution environments. Files uploaded to the data container utilize custom data streams verified continuously by automated hashing functions.
+## Project structure
+
+```text
+DocTrackSys/
+├── build.xml
+├── lib/sqlite-jdbc.jar
+└── src/doctrack/
+    ├── Main.java
+    ├── model/    Document, Office, Personnel, User, Attachment, RoutingStep
+    ├── dao/      database access for each model
+    ├── db/       DBConnection and schema.sql
+    ├── ui/       login, main window, panels and dialogs
+    ├── report/   summary report generation
+    └── util/     password hashing, file hashing, backup, CSV, logging, paths
+```
+
+## Roadmap
+
+- CSV import
+- User management screen and change-password screen
+- Fine-grained, role-based permissions
+- Scheduled backups
+- Archiving old audit log entries
+
+## Author
+
+Built by [@marsdux](https://github.com/marsdux).
